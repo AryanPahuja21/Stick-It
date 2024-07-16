@@ -40,6 +40,11 @@ const Notes = () => {
     setError("");
   };
 
+  const deleteNote = (id) => {
+    const updatedNotes = notes.filter((note) => note.id !== id);
+    setNotes(updatedNotes);
+  };
+
   return (
     <main className="mt-10">
       <div className="flex flex-col justify-center ">
@@ -64,7 +69,7 @@ const Notes = () => {
       </div>
       <div>
         {notes.map((note) => {
-          return <Note key={note.id} note={note} />;
+          return <Note key={note.id} note={note} deleteNote={deleteNote} />;
         })}
       </div>
     </main>
