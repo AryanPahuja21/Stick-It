@@ -1,11 +1,12 @@
-import React from "react";
+import React, { forwardRef } from "react";
 
-const Note = ({ note, deleteNote }) => {
+const Note = forwardRef(({ note, deleteNote }, ref) => {
   const handleDeleteNote = () => {
     deleteNote(note.id);
   };
   return (
     <div
+      ref={ref}
       className={
         "w-[200px] relative p-4 bg-yellow-100 border border-black cursor-move select-none break-words"
       }
@@ -23,6 +24,6 @@ const Note = ({ note, deleteNote }) => {
       </button>
     </div>
   );
-};
+});
 
 export default Note;

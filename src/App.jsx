@@ -2,7 +2,7 @@ import Notes from "./components/Notes";
 
 export default function App() {
   return (
-    <div>
+    <div className="h-screen">
       <Notes />
     </div>
   );
