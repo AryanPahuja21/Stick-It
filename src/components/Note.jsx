@@ -2,9 +2,8 @@ import React from "react";
 
 const Note = ({ note }) => {
   return (
-    <div>
-      <h1>Hi</h1>
-      <h1>{note.content}</h1>
+    <div className="w-fit p-4 bg-yellow-100 border border-black cursor-move select-none">
+      <h1>📌 {note.content}</h1>
     </div>
   );
 };
