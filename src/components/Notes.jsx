@@ -56,7 +56,7 @@ const Notes = () => {
     const offsetX = e.clientX - rect.left;
     const offsetY = e.clientY - rect.top;
 
-    const startPos = note;
+    const startPos = note.position; // Save the initial position
 
     const handleMouseMove = (e) => {
       const x = e.clientX - offsetX;
@@ -73,7 +73,10 @@ const Notes = () => {
       const finalRect = noteRef.getBoundingClientRect();
       const newPosition = { x: finalRect.left, y: finalRect.top };
 
-      if (false) {
+      if (checkForOverlap(id)) {
+        // Revert to the initial position if there is an overlap
+        noteRef.style.left = `${startPos.x}px`;
+        noteRef.style.top = `${startPos.y}px`;
       } else {
         updateNotePosition(id, newPosition);
       }
@@ -81,6 +84,30 @@ const Notes = () => {
 
     document.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseup", handleMouseUp);
+  };
+
+  const checkForOverlap = (id) => {
+    const currentNoteRef = noteRefs.current[id].current;
+    const rect = currentNoteRef.getBoundingClientRect();
+
+    return notes.some((note) => {
+      if (note.id === id) {
+        return false;
+      }
+
+      const otherNoteRef = noteRefs.current[note.id].current;
+      const otherRect = otherNoteRef.getBoundingClientRect();
+
+      // Check if the rectangles overlap
+      const overlap = !(
+        rect.right < otherRect.left ||
+        rect.left > otherRect.right ||
+        rect.bottom < otherRect.top ||
+        rect.top > otherRect.bottom
+      );
+
+      return overlap;
+    });
   };
 
   const updateNotePosition = (id, newPosition) => {
@@ -125,12 +152,7 @@ const Notes = () => {
       <div>
         {notes.map((note) => {
           return (
-            <div
-              key={note.id}
-              onMouseDown={(e) => {
-                handleDragStart(note, e);
-              }}
-            >
+            <div key={note.id} onMouseDown={(e) => handleDragStart(note, e)}>
               <Note
                 ref={
                   noteRefs.current[note.id]
