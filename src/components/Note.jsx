@@ -2,8 +2,16 @@ import React from "react";
 
 const Note = ({ note }) => {
   return (
-    <div className="w-fit p-4 bg-yellow-100 border border-black cursor-move select-none">
-      <h1>📌 {note.content}</h1>
+    <div
+      className={
+        "w-[200px] absolute p-4 bg-yellow-100 border border-black cursor-move select-none break-words"
+      }
+      style={{
+        left: `${note.position.x}px`,
+        top: `${note.position.y}px`,
+      }}
+    >
+      📌 {note.content}
     </div>
   );
 };

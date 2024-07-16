@@ -2,31 +2,40 @@ import React, { useEffect, useState } from "react";
 import Note from "./Note";
 
 const Notes = () => {
-  const [notes, setNotes] = useState([
-    {
-      id: 1,
-      content: "This is a note",
-    },
-    {
-      id: 2,
-      content: "This is another note",
-    },
-  ]);
+  const [notes, setNotes] = useState(() => {
+    const savedNotes = JSON.parse(localStorage.getItem("notes")) || [];
+    return savedNotes;
+  });
   const [content, setContent] = useState("");
   const [error, setError] = useState("");
 
-  const createNewNote = (newNoteContent) => {
+  useEffect(() => {
+    localStorage.setItem("notes", JSON.stringify(notes));
+  }, [notes]);
+
+  const determineNewPosition = () => {
+    const maxX = window.innerWidth - 250;
+    const maxY = window.innerHeight - 250;
+
+    return {
+      x: Math.floor(Math.random() * maxX),
+      y: Math.floor(Math.random() * maxY),
+    };
+  };
+
+  const createNewNote = () => {
     if (content === "") {
       setError("Note cannot be empty");
       return;
     }
-    setNotes([
-      ...notes,
-      {
-        id: notes.length + 1,
-        content: content,
-      },
-    ]);
+
+    const newNote = {
+      id: Date.now(),
+      content,
+      position: determineNewPosition(),
+    };
+
+    setNotes((prevNotes) => [...prevNotes, newNote]);
     setContent("");
     setError("");
   };
